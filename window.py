@@ -18,12 +18,15 @@ def version1():
     window = Tk()
     window.title("Дипломная работа Суровцева Р.В. ИМММО-01-21")
     window.mainloop()
+
 def version2():
     data = pd.read_csv('Coca_Cola_Company.csv')
     data.isna().sum()
     close = data['Close']
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=close.index, y=1/close,mode='lines', line=dict(color='blue', width=1.5)))
+    #fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="black")
+    #fig.add_vline(x=1571, line_width=1, line_dash="dash", line_color="red")#e^2
     fig.update_layout(  height=720, 
                         width=700,
                         autosize=False,
@@ -31,22 +34,19 @@ def version2():
                         yaxis_title='1/Close',
                         xaxis_title='t, торговые дни',
                         showlegend=False)
-    #fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="black")
-    #fig.add_vline(x=1571, line_width=1, line_dash="dash", line_color="red")#e^2
-
-def read_transactions(filename: str):
-    with open(filename, mode="r", newline='') as f:
-        lines = list()
-        for row in f:
-            line = list()
-            for s in row.split(';'):
-                s = s.strip()
-                if s:
-                    line.append(s)
-            lines.append(line)
-    return lines[1:]
     
 def version3():
+    def read_transactions(filename: str):
+        with open(filename, mode="r", newline='') as f:
+            lines = list()
+            for row in f:
+                line = list()
+                for s in row.split(';'):
+                    s = s.strip()
+                    if s:
+                        line.append(s)
+                lines.append(line)
+        return lines[1:]
     transactions = read_transactions("Coca_Cola_Company.csv")
     time_apriori = 22.21
     time_e_apriori = 1.32
@@ -59,42 +59,6 @@ def version3():
     plt.ylim(0, time_apriori+1)
     plt.title("1000 repeats of transactions")
     plt.show()
-
-def plot_embeddings(embedded_tsne, embedded_umap, targets):
-    labels = list(range(np.max(targets)+1))
-    palette = np.array(sns.color_palette(n_colors=len(labels)))
-
-    patchs = []
-    for i, color in enumerate(palette):
-        patchs.append(mpatches.Patch(color=color, label=i))
-
-
-    plt.figure(figsize=(16, 16))
-    plt.subplot(2, 1, 1)
-    plt.scatter(embedded_tsne[:,0], embedded_tsne[:,1], c=palette[targets])
-    plt.legend(handles=patchs, loc='upper right')
-    plt.title("Embedded with t-SNE")
-
-    plt.subplot(2, 1, 2)
-    plt.scatter(embedded_umap[:,0], embedded_umap[:,1], c=palette[targets])
-    plt.legend(handles=patchs, loc='upper right')
-    plt.title("Embedded with UMAP")
-
-    plt.show()
-
-def read_data(filename: str, delimeter=';'):
-    with open(filename, mode="r", newline='') as f:
-        features = list()
-        targets = list()
-        for row in f:
-            line = list()
-            for s in row.split(delimeter):
-                s = s.strip()
-                if s:
-                    line.append(s)
-            features.append(list(map(float ,line[1:-1])))
-            targets.append(int(line[-1]))
-    return features, targets
 
 def version4():
     def plot_embeddings(embedded_tsne, embedded_umap, targets):
