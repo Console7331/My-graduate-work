@@ -9,7 +9,7 @@ import seaborn as sns
 import matplotlib.patches as mpatches
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
-from umap import UMAP
+import umap.umap_ as UMAP
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
@@ -173,3 +173,5 @@ def version5():
     best_svc.fit(x_train, y_train)
     len(best_svc.support_vectors_)
     plot_results(features, targets, best_svc)
+
+version1()
